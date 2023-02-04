@@ -1,53 +1,57 @@
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 
+export function useSpeechRecognition() {
+  const speechRecognitionRef = useRef(null);
+  const [results, setResults] = useState<string[]>([]);
 
-export function useSpeechRecognition(){
+  useEffect(() => {
+    var SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
 
+    const recognizer = new SpeechRecognition();
+    speechRecognitionRef.current = recognizer;
+    console.log("recognizer", recognizer);
+    speechRecognitionRef.current.lang = "en-US";
+    speechRecognitionRef.current.continuous = true;
+    speechRecognitionRef.current.addEventListener("result", (e) => {
+      console.log("result", e.results);
+      const results = Object.values(e.results).map(
+        (result) => result[0].transcript
+      );
+      setResults(results);
+    });
 
-    const speechRecognitionRef = useRef(null);
-    const [results, setResults] = useState<string[]>([]);
+    speechRecognitionRef.current.addEventListener("audiostart", (e) => {
+      console.log("audiostart", e);
+    });
 
-    useEffect(() => {
+    speechRecognitionRef.current.addEventListener("soundstart", (e) => {
+      console.log("soundstart", e);
+    });
 
-        var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    speechRecognitionRef.current.addEventListener("speechstart", (e) => {
+      console.log("speechstart", e);
+    });
+  }, []);
 
-        const recognizer = new SpeechRecognition()
-        speechRecognitionRef.current = recognizer
-        console.log("recognizer",recognizer)
-        speechRecognitionRef.current.lang = "en-US"
-        speechRecognitionRef.current.continuous = true
-        speechRecognitionRef.current.addEventListener("result", (e) => {
-            console.log("result", e)
-            setResults((prev) => [...prev, e.results[0][0].transcript])
-        })
+  const startListening = () => {
+    if (!speechRecognitionRef.current) return;
+    speechRecognitionRef.current.start();
+  };
 
-        speechRecognitionRef.current.addEventListener("audiostart", (e) => {
-            console.log("audiostart", e)
-        })
+  const stopListening = () => {
+    if (!speechRecognitionRef.current) return;
+    speechRecognitionRef.current.stop();
+  };
 
-        speechRecognitionRef.current.addEventListener("soundstart", (e) => {
-            console.log("soundstart", e)
-        })
+  const resetResults = () => {
+    setResults([]);
+  };
 
-        speechRecognitionRef.current.addEventListener("speechstart", (e) => {
-            console.log("speechstart", e)
-        })
-
-    }, [])
-
-    const startListening = () => {
-        if (!speechRecognitionRef.current) return;
-        speechRecognitionRef.current.start();
-    }
-
-    const stopListening = () => {
-        if (!speechRecognitionRef.current) return;
-        speechRecognitionRef.current.stop();
-    }
-
-    return {
-        startListening,
-        stopListening,
-        results
-    }
+  return {
+    startListening,
+    stopListening,
+    results,
+    resetResults,
+  };
 }
