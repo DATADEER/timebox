@@ -5,6 +5,7 @@
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
+    "noImplicitAny": false, // because it's a prototype
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,

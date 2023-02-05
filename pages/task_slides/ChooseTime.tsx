@@ -6,7 +6,7 @@ export function ChooseTime({
   setTimerStartTime,
 }: {
   taskName: string;
-  savedRecordingUrl: string;
+  savedRecordingUrl: string | null;
   setTimerStartTime: (time: number) => void;
 }) {
   const [customTime, setCustomTime] = useState(1);
