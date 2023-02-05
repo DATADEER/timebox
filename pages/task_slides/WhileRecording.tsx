@@ -14,7 +14,6 @@ export function WhileRecording({
             </h1>
           </li>
         ))}
-        <li>test</li>
       </ul>
       <div className="p-12">
         <button
