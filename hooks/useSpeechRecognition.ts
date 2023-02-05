@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 export function useSpeechRecognition() {
-  const speechRecognitionRef = useRef(null);
+  const speechRecognitionRef = useRef<SpeechRecognition | null>(null);
   const [results, setResults] = useState<string[]>([]);
 
   useEffect(() => {
@@ -11,6 +11,7 @@ export function useSpeechRecognition() {
     const recognizer = new SpeechRecognition();
     speechRecognitionRef.current = recognizer;
     console.log("recognizer", recognizer);
+
     speechRecognitionRef.current.lang = "en-US";
     speechRecognitionRef.current.continuous = true;
     speechRecognitionRef.current.addEventListener("result", (e) => {

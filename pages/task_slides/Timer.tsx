@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useTimer } from "react-timer-hook";
 
 import { addMinutes } from "date-fns";
@@ -12,17 +11,7 @@ export function Timer({
   startDuration: number;
   finishTask: () => void;
 }) {
-  const {
-    seconds,
-    minutes,
-    hours,
-    days,
-    isRunning,
-    start,
-    pause,
-    resume,
-    restart,
-  } = useTimer({
+  const { seconds, absoluteMinutes, isRunning, pause, resume } = useTimer({
     expiryTimestamp: addMinutes(new Date(), startDuration),
     onExpire: () => console.log("onExpire called"),
   });
@@ -36,8 +25,7 @@ export function Timer({
         </div>
         <div className="pt-40">
           <h4 className="text-8xl mb-1">
-            {prefixWith0IfLessThan10(hours)} :{" "}
-            {prefixWith0IfLessThan10(minutes)} :{" "}
+            {prefixWith0IfLessThan10(absoluteMinutes)} :{" "}
             {prefixWith0IfLessThan10(seconds)}
           </h4>
         </div>
